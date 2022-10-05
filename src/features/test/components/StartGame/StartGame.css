@@ -1,0 +1,28 @@
+.btn-start-game {
+    display: flex;
+    justify-content: center;
+}
+.line-create-game{
+    margin-top: 10px;
+    background: silver;
+    width: 100%;
+    height: 1px;
+}
+.header-create-game{
+    display: flex;
+    justify-content: space-between;
+}
+.input-player-wrapper{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.input-player{
+    margin-left: 30px;
+    height: 20px;
+}
+.btn-submit-create-game{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
