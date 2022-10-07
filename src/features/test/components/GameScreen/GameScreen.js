@@ -3,7 +3,7 @@ import ListItem from "@mui/joy/ListItem";
 import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
 import { Button, Stack } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,6 +19,7 @@ import "./GameScreen.css";
 
 const GameScreen = () => {
   const [answer, setAnswer] = useState("");
+  const [time, setTime] = useState(10);
   const [hiddenNextPlayer, setHiddenNextPlayer] = useState(true);
   const [hiddenViewResult, setHiddenViewResult] = useState(true);
   const question = useSelector(questions);
@@ -32,6 +33,25 @@ const GameScreen = () => {
     ...question[indexQuestion].incorrect_answers,
   ];
 
+  useEffect(() => {
+    let interval = null;
+    interval = setInterval(() => {
+      setTime(time - 1);
+    }, 1000);
+
+    if (!hiddenNextPlayer || !hiddenViewResult) {
+      clearInterval(interval);
+    }
+
+    if (time === 0) {
+      handleSubmit();
+      if (indexQuestion === question.length - 1) {
+        clearInterval(interval);
+      }
+    }
+    return () => clearInterval(interval);
+  }, [time]);
+
   const handleChangeInput = (e) => {
     setAnswer(e.target.value);
   };
@@ -43,12 +63,13 @@ const GameScreen = () => {
         answer: answer,
         result: question[indexQuestion].correct_answer,
         // score: question[indexQuestion].correct_answer === answer ? 1 : 0,
-        timeFinish: 0,
+        timeFinish: 10 - time,
       })
     );
 
     if (indexQuestion !== question.length - 1) {
       dispatch(nextQuestion());
+      setTime(10);
     }
     if (indexQuestion === question.length - 1) {
       setHiddenNextPlayer(false);
@@ -64,6 +85,7 @@ const GameScreen = () => {
   };
   const handleNextPlayer = () => {
     dispatch(nextPlayer());
+    setTime(10);
     setHiddenNextPlayer(true);
   };
 
@@ -73,7 +95,10 @@ const GameScreen = () => {
 
   return (
     <div>
-      <div>{listPlayers[indexPlayers]}</div>
+      <div className="header-game-screen">
+        <div> Player : {listPlayers[indexPlayers]}</div>
+        <div>Time Remaining : {time}</div>
+      </div>
       <div>{question[indexQuestion].question}</div>
       <RadioGroup
         aria-label="Your plan"

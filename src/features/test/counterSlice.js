@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 export const getAnswer = createAsyncThunk("answer/getAnswer", async () => {
-  const res = await axios("https://opentdb.com/api.php?amount=2&type=multiple");
+  const res = await axios("https://opentdb.com/api.php?amount=3&type=multiple");
 
   return res.data.results;
 });
@@ -39,6 +39,7 @@ export const counterSlice = createSlice({
           answerPlayer: [],
           answerApi: [],
           score: 0,
+          timeFinish: [],
         };
       }
       state.results[data.player].namePlayer = data.player;
@@ -47,6 +48,7 @@ export const counterSlice = createSlice({
       if (data.answer === data.result) {
         state.results[data.player].score = state.results[data.player].score + 1;
       }
+      state.results[data.player].timeFinish.push(data.timeFinish);
     },
     nextQuestion: (state, action) => {
       state.indexQuestions += 1;

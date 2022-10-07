@@ -9,3 +9,9 @@
 .hiddenViewResult{
     display: none !important;
 }
+.header-game-screen{
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    padding: 0 100px;
+}
