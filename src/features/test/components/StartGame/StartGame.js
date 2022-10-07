@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import "./StartGame.css";
-import { Box, CircularProgress, Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import {
   getAnswer,
   savePlayer1,
@@ -23,15 +25,30 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+const style2 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100%",
+  height: "100%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 const StartGame = () => {
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [namePlayer1, setNamePlayer1] = useState("");
   const [namePlayer2, setNamePlayer2] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const page = useNavigate();
   const dispatch = useDispatch();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
   const handleChangePlayer1 = (e) => {
     setNamePlayer1(e.target.value);
@@ -42,11 +59,13 @@ const StartGame = () => {
   };
 
   const saveNamePlayer = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
+    handleOpen2(true);
     dispatch(savePlayer1(namePlayer1));
     dispatch(savePlayer2(namePlayer2));
     dispatch(savePlayerToList());
     dispatch(getAnswer()).then(() => page("/gameScreen"));
+
     // handleClose();
   };
 
@@ -92,7 +111,7 @@ const StartGame = () => {
             <div className="btn-submit-create-game">
               <Stack spacing={2} direction="row">
                 <Button onClick={saveNamePlayer} variant="contained">
-                  {isLoading && (
+                  {/* {isLoading && (
                     <CircularProgress
                       style={{
                         width: "20px",
@@ -101,10 +120,23 @@ const StartGame = () => {
                         marginRight: "15px",
                       }}
                     />
-                  )}
+                  )} */}
                   Submit
                 </Button>
               </Stack>
+              <Modal
+                open={open2}
+                onClose={handleClose2}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style2}>
+                  <div className="icon-shuffle">
+                    <span>Match 1</span>
+                    <FontAwesomeIcon icon={faShuffle} />
+                  </div>
+                </Box>
+              </Modal>
             </div>
           </Box>
         </Modal>

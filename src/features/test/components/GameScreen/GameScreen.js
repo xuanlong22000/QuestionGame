@@ -20,8 +20,8 @@ import "./GameScreen.css";
 const GameScreen = () => {
   const [answer, setAnswer] = useState("");
   const [time, setTime] = useState(10);
-  const [hiddenNextPlayer, setHiddenNextPlayer] = useState(true);
-  const [hiddenViewResult, setHiddenViewResult] = useState(true);
+  // const [hiddenNextPlayer, setHiddenNextPlayer] = useState(true);
+  // const [hiddenViewResult, setHiddenViewResult] = useState(true);
   const question = useSelector(questions);
   const indexQuestion = useSelector(indexQuestions);
   const indexPlayers = useSelector(indexPlayer);
@@ -39,15 +39,15 @@ const GameScreen = () => {
       setTime(time - 1);
     }, 1000);
 
-    if (!hiddenNextPlayer || !hiddenViewResult) {
-      clearInterval(interval);
-    }
+    // if (!hiddenNextPlayer || !hiddenViewResult) {
+    //   clearInterval(interval);
+    // }
 
     if (time === 0) {
       handleSubmit();
-      if (indexQuestion === question.length - 1) {
-        clearInterval(interval);
-      }
+      // if (indexQuestion === question.length - 1) {
+      //   clearInterval(interval);
+      // }
     }
     return () => clearInterval(interval);
   }, [time]);
@@ -56,13 +56,20 @@ const GameScreen = () => {
     setAnswer(e.target.value);
   };
 
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
   const handleSubmit = () => {
     dispatch(
       saveResults({
         player: listPlayers[indexPlayers],
         answer: answer,
         result: question[indexQuestion].correct_answer,
-        // score: question[indexQuestion].correct_answer === answer ? 1 : 0,
         timeFinish: 10 - time,
       })
     );
@@ -72,26 +79,29 @@ const GameScreen = () => {
       setTime(10);
     }
     if (indexQuestion === question.length - 1) {
-      setHiddenNextPlayer(false);
+      dispatch(nextPlayer());
+      setTime(10);
+      // setHiddenNextPlayer(false);
     }
     if (
       indexPlayers === listPlayers.length - 1 &&
       indexQuestion === question.length - 1
     ) {
-      setHiddenNextPlayer(true);
-      setHiddenViewResult(false);
+      page("/result");
+      // setHiddenNextPlayer(true);
+      // setHiddenViewResult(false);
     }
     setAnswer("");
   };
-  const handleNextPlayer = () => {
-    dispatch(nextPlayer());
-    setTime(10);
-    setHiddenNextPlayer(true);
-  };
+  // const handleNextPlayer = () => {
+  //   dispatch(nextPlayer());
+  //   setTime(10);
+  //   setHiddenNextPlayer(true);
+  // };
 
-  const handleViewResult = () => {
-    page("/result");
-  };
+  // const handleViewResult = () => {
+  //   page("/result");
+  // };
 
   return (
     <div>
@@ -140,16 +150,12 @@ const GameScreen = () => {
       </RadioGroup>
       <div className="btn-submit-game">
         <Stack spacing={2} direction="row">
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            disabled={!answer || !hiddenNextPlayer || !hiddenViewResult}
-          >
+          <Button onClick={handleSubmit} variant="contained" disabled={!answer}>
             Submit
           </Button>
         </Stack>
       </div>
-      <div className="btn-submit-game">
+      {/* <div className="btn-submit-game">
         <Stack spacing={2} direction="row">
           <Button
             className={hiddenNextPlayer && "hiddenNextPlayer"}
@@ -170,7 +176,7 @@ const GameScreen = () => {
             View Result
           </Button>
         </Stack>
-      </div>
+      </div> */}
     </div>
   );
 };

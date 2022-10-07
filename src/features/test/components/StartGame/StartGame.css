@@ -26,3 +26,11 @@
     justify-content: center;
     margin-top: 30px;
 }
+.icon-shuffle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 120px;
+    height: 100%;
+}

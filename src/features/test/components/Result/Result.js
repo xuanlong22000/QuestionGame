@@ -35,7 +35,47 @@ const Result = () => {
   const handleClose = () => setOpen(false);
 
   const lisResult = Object.values(result);
-  console.log(lisResult);
+
+  const timePlayer1 = lisResult[0].timeFinish.reduce(
+    (partialSum, a) => partialSum + a,
+    0
+  );
+  const timePlayer2 = lisResult[1].timeFinish.reduce(
+    (partialSum, a) => partialSum + a,
+    0
+  );
+
+  const selectWinner = () => {
+    if (lisResult[0].score !== lisResult[1].score) {
+      return (
+        "Winner : " +
+        lisResult.filter(
+          (item) =>
+            item.score ===
+            Math.max.apply(
+              Math,
+              lisResult.map(function (o) {
+                return o.score;
+              })
+            )
+        )[0].namePlayer
+      );
+    } else if (
+      lisResult[0].score === lisResult[1].score &&
+      timePlayer1 !== timePlayer2
+    ) {
+      return (
+        "Winner : " +
+        lisResult.filter(
+          (item) =>
+            item.timeFinish.reduce((partialSum, a) => partialSum + a, 0) ===
+            Math.min(timePlayer1, timePlayer2)
+        )[0].namePlayer
+      );
+    } else {
+      return "Draw";
+    }
+  };
 
   const filterPosts = lisResult.filter((result) =>
     result.namePlayer.toLowerCase().includes(search.toLowerCase())
@@ -58,9 +98,10 @@ const Result = () => {
         >
           <Box sx={style}>
             <div style={{ textAlign: "center", fontSize: "40px" }}>
-              {lisResult[0].score > lisResult[1].score
+              {/* {lisResult[0].score > lisResult[1].score
                 ? `Winner : ${lisResult[0].namePlayer}`
-                : `Winner : ${lisResult[1].namePlayer}`}
+                : `Winner : ${lisResult[1].namePlayer}`} */}
+              {selectWinner()}
             </div>
           </Box>
         </Modal>
@@ -104,7 +145,12 @@ const Result = () => {
                   ))}
                 </TableCell>
                 <TableCell>{result.score}</TableCell>
-                <TableCell>{result.timeFinish}</TableCell>
+                <TableCell>
+                  {result.timeFinish.reduce(
+                    (partialSum, a) => partialSum + a,
+                    0
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
