@@ -20,6 +20,16 @@ export const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
+    reloadStorage: (state, action) => {
+      state.namePlayer1 = "";
+      state.namePlayer2 = "";
+      state.listPlayer = [];
+      state.questions = [];
+      state.results = {};
+      state.indexQuestions = 0;
+      state.indexPlayer = 0;
+      // console.log(action.payload, state);
+    },
     savePlayer1: (state, action) => {
       state.namePlayer1 = action.payload;
     },
@@ -81,14 +91,15 @@ export const {
   saveResults,
   nextQuestion,
   nextPlayer,
+  reloadStorage,
 } = counterSlice.actions;
 
-export const namePlayer1 = (state) => state.counter.namePlayer1;
-export const namePlayer2 = (state) => state.counter.namePlayer2;
-export const questions = (state) => state.counter.questions;
-export const indexQuestions = (state) => state.counter.indexQuestions;
-export const indexPlayer = (state) => state.counter.indexPlayer;
-export const listPlayer = (state) => state.counter.listPlayer;
-export const results = (state) => state.counter.results;
+export const namePlayer1 = (state) => state.counter.counter.namePlayer1;
+export const namePlayer2 = (state) => state.counter.counter.namePlayer2;
+export const questions = (state) => state.counter.counter.questions;
+export const indexQuestions = (state) => state.counter.counter.indexQuestions;
+export const indexPlayer = (state) => state.counter.counter.indexPlayer;
+export const listPlayer = (state) => state.counter.counter.listPlayer;
+export const results = (state) => state.counter.counter.results;
 
 export default counterSlice.reducer;

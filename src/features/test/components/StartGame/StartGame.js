@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import "./StartGame.css";
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import {
   getAnswer,
+  reloadStorage,
   savePlayer1,
   savePlayer2,
   savePlayerToList,
@@ -49,6 +50,11 @@ const StartGame = () => {
   const handleClose = () => setOpen(false);
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
+
+  useEffect(() => {
+    localStorage.clear();
+    dispatch(reloadStorage());
+  }, []);
 
   const handleChangePlayer1 = (e) => {
     setNamePlayer1(e.target.value);
